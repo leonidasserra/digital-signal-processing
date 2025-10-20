@@ -1,6 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+#Expressão do Lucro é y[n]=(1+r)y[n-1]+x[n]
+
+#Lembrar de colocar a expressão em avanço pra calcular a homogenea
 def solve_edo_homo(coeficientes_entrada,cond_menos_um, cond_menos_dois):
     if(len(coeficientes_entrada)==2):
 
