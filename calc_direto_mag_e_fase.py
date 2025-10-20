@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import sympy as sp
 
 # 1. Definição do Sistema
 num = [0.038, 0.034]
@@ -16,7 +17,7 @@ print(f"Sinal de Entrada: x[n] = {A_in:.2f} * cos({omega_0:.2f}*n + {phi_in:.2f}
 z = np.exp(1j * omega_0)
 H_em_omega_0 = np.polyval(num, z) / np.polyval(den, z)
 
-# 4. Amplitude e fase da resposta
+# 4. Amplitude e fase da resposta numéricas
 mag_H = np.abs(H_em_omega_0)
 fase_H = np.angle(H_em_omega_0)
 
@@ -24,13 +25,31 @@ print(f"Na frequência Ω₀ = {omega_0:.2f} rad/amostra:")
 print(f"   - Ganho de Amplitude |H(e^jΩ₀)| = {mag_H:.4f}")
 print(f"   - Deslocamento de Fase ∠H(e^jΩ₀) = {fase_H:.4f} rad\n")
 
-# 5. Sinal de saída previsto
+# 5. Cálculo simbólico das expressões de magnitude e fase
+omega = sp.symbols('omega', real=True)
+z_sym = sp.exp(sp.I * omega)
+
+num_poly = sum(num[i] * z_sym**(len(num) - 1 - i) for i in range(len(num)))
+den_poly = sum(den[i] * z_sym**(len(den) - 1 - i) for i in range(len(den)))
+H_sym = sp.simplify(num_poly / den_poly)
+
+# Expressões simbólicas de magnitude e fase
+mag_expr = sp.simplify(sp.Abs(H_sym))
+fase_expr = sp.simplify(sp.arg(H_sym))
+
+print("Expressão simbólica da magnitude:")
+sp.pprint(mag_expr)
+print("\nExpressão simbólica da fase (radianos):")
+sp.pprint(fase_expr)
+print()
+
+# 6. Sinal de saída previsto
 A_out = A_in * mag_H
 phi_out = phi_in + fase_H
 
 print(f"Sinal de Saída Previsto: y[n] = {A_out:.2f} * cos({omega_0:.2f}*n + {phi_out:.2f})")
 
-# 6. Geração e plotagem dos sinais
+# 7. Geração e plotagem dos sinais
 n = np.arange(0, 51)
 x_n = A_in * np.cos(omega_0 * n + phi_in)
 y_n = A_out * np.cos(omega_0 * n + phi_out)
@@ -46,6 +65,7 @@ plt.legend()
 plt.grid(True)
 plt.tight_layout()
 plt.show()
+
 
 
 # Deslocamento para direita (atraso):
