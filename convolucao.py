@@ -37,3 +37,7 @@ axs[2].grid(True)
 plt.xlabel('Tempo (n)')
 plt.tight_layout()
 plt.show()
+
+
+# np.convolve(x, h)
+  

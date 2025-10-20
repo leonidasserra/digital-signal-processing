@@ -46,3 +46,16 @@ plt.legend()
 plt.grid(True)
 plt.tight_layout()
 plt.show()
+
+
+# Deslocamento para direita (atraso):
+# x[n]u[n] <=> X[z]
+# x[n - 1]u[n - 1] <=> (1/z) * X[z]
+# x[n - m]u[n - m] <=> (1/z**m) * X[z]
+# x[n - 1]u[n] <=> (1/z) * X[z] + x[-1]
+# x[n - 2]u[n] <=> (1/z**2) * X[z] + (1/z) * x[-1] + x[-2]
+
+# Deslocamento para esquerda (avanço):
+# x[n]u[n] <=> X[z]
+# x[n + 1]u[n] <=> z*X[z] - z*x[0]
+# x[n + 2]u[n] <=> (z**2)*X[z] - (z**2)*x[0] - z*x[1]
