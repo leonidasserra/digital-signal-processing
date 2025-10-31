@@ -11,13 +11,17 @@ def convolucao(x, h):
     print(result)
     return result
 
-n=np.arange(0,3)
-x = [500,500,500] 
-h = 1 + 9901*(0.99)**n;    
+n_samples=4
+n=np.arange(n_samples)
+x = 500*np.ones(n_samples)
+x[0]=9000
+
+
+h = (1.01)**n;    
 
 y=convolucao(x,h)
 
-print(np.convolve(x,h))
+
 
 fig, axs = plt.subplots(3, 1, figsize=(6, 4), sharex=True)
 t = np.arange(0, max(len(x), len(h)),1)
@@ -39,5 +43,5 @@ plt.tight_layout()
 plt.show()
 
 
-# np.convolve(x, h)
+
   

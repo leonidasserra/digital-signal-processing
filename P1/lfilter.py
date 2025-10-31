@@ -11,21 +11,21 @@ import matplotlib.pyplot as plt
 # Exemplo: H(z) = (0.5 + 0.5z⁻¹) / (1 - 0.8z⁻¹)
 #
 # Coeficientes do numerador (b)
-b = [0.5, 0.5]
+b = [1]
 # Coeficientes do denominador (a)
-a = [1, -0.8]
+a = [1, -1.01]
 
 # --- 2. Definição do Sinal de Entrada x[n] no tempo ---
 # Vamos usar um sinal degrau unitário (step function) como entrada.
 # O sinal terá 30 amostras de tempo.
-n_samples = 30
+n_samples = 4
 # Cria um vetor de tempo discreto de 0 a 29
 n = np.arange(n_samples)
 # O sinal de entrada x[n] é 1 para todo n >= 0
-x = np.ones(n_samples)
-
+x = 500*np.ones(n_samples)
+x[0] = 0
 # Alternativa: Para um impulso unitário (delta de Kronecker)
-# x = np.zeros(n_samples)
+x1 = np.zeros(n_samples)
 # x[0] = 1
 
 # --- 3. Aplicação do Filtro para Obter a Resposta y[n] ---
