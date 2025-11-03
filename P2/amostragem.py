@@ -45,3 +45,23 @@ plt.tight_layout()
 plt.show()
 
 print(f"Número de amostras: {sum(1 for v in x_amostrado if v != 0)}")
+
+
+
+
+
+"""
+    Processo completo de amostragem com análise no domínio do tempo e frequência.
+    
+    Parâmetros:
+    - x_t: sinal contínuo x(t)
+    - t: vetor de tempo correspondente
+    - fs: frequência de amostragem
+    - plotar: se True, gera os gráficos
+    
+    Retorna:
+    - x_n: sinal amostrado (vetor esparso com zeros)
+    - x_n_compacto: apenas os valores amostrados
+    - indices_amostras: índices das amostras
+    - info: dicionário com informações espectrais
+"""
