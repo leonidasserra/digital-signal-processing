@@ -5,33 +5,27 @@ from scipy import signal
 def filtro_passa_baixa(R, C, ordem=1):
     """
     Gera e plota o Bode de um filtro RC passa-baixa de 1ª ou 2ª ordem.
-    - Para 1ª ordem: usa R e C únicos.
-    - Para 2ª ordem: espera R e C como listas [R1, R2] e [C1, C2].
+    - Ordem 1: H(s) = 1 / (1 + sRC)
+    - Ordem 2: H(s) = 1 / (1 + sRC)^2
     """
     if ordem == 1:
-        # 1ª ordem: H(s) = 1 / (1 + sRC)
-        R1, C1 = R, C
         num = [1]
-        den = [R1*C1, 1]
-        fc = 1 / (2*np.pi*R1*C1)
+        den = [R*C, 1]
+        fc = 1 / (2*np.pi*R*C)
         print("\n=== FILTRO PASSA-BAIXA (1ª ORDEM) ===")
-        print(f"R = {R1} Ω, C = {C1} F")
+        print(f"R = {R} Ω, C = {C} F")
         print(f"Frequência de corte: {fc:.2f} Hz")
-        print(f"H(s) = 1 / (1 + s*{R1*C1:.2e})")
+        print(f"H(s) = 1 / (1 + s*{R*C:.2e})")
 
     elif ordem == 2:
-        # 2ª ordem (duas células RC em cascata)
-        R1, R2 = R
-        C1, C2 = C
+        # Segunda ordem com R1=R2=R e C1=C2=C → uma única frequência de corte
         num = [1]
-        den = np.polymul([R1*C1, 1], [R2*C2, 1])  # multiplica os dois polinômios (1 + sR1C1)(1 + sR2C2)
-        fc1 = 1 / (2*np.pi*R1*C1)
-        fc2 = 1 / (2*np.pi*R2*C2)
+        den = [R**2 * C**2, 2*R*C, 1]
+        fc = 1 / (2*np.pi*R*C)
         print("\n=== FILTRO PASSA-BAIXA (2ª ORDEM) ===")
-        print(f"R1 = {R1} Ω, C1 = {C1} F")
-        print(f"R2 = {R2} Ω, C2 = {C2} F")
-        print(f"Frequências de corte individuais: {fc1:.2f} Hz e {fc2:.2f} Hz")
-        print(f"Função de transferência: H(s) = 1 / [(1 + s*{R1*C1:.2e})(1 + s*{R2*C2:.2e})]")
+        print(f"R1 = R2 = {R} Ω, C1 = C2 = {C} F")
+        print(f"Frequência de corte única: {fc:.2f} Hz")
+        print(f"H(s) = 1 / (1 + s*{R*C:.2e})²")
 
     else:
         raise ValueError("Ordem deve ser 1 ou 2.")
@@ -57,33 +51,26 @@ def filtro_passa_baixa(R, C, ordem=1):
 def filtro_passa_alta(R, C, ordem=1):
     """
     Gera e plota o Bode de um filtro RC passa-alta de 1ª ou 2ª ordem.
-    - Para 1ª ordem: usa R e C únicos.
-    - Para 2ª ordem: espera R e C como listas [R1, R2] e [C1, C2].
+    - Ordem 1: H(s) = sRC / (1 + sRC)
+    - Ordem 2: H(s) = (sRC)^2 / (1 + sRC)^2
     """
     if ordem == 1:
-        # 1ª ordem: H(s) = sRC / (1 + sRC)
-        R1, C1 = R, C
-        num = [R1*C1, 0]
-        den = [R1*C1, 1]
-        fc = 1 / (2*np.pi*R1*C1)
+        num = [R*C, 0]
+        den = [R*C, 1]
+        fc = 1 / (2*np.pi*R*C)
         print("\n=== FILTRO PASSA-ALTA (1ª ORDEM) ===")
-        print(f"R = {R1} Ω, C = {C1} F")
+        print(f"R = {R} Ω, C = {C} F")
         print(f"Frequência de corte: {fc:.2f} Hz")
-        print(f"H(s) = (s*{R1*C1:.2e}) / (1 + s*{R1*C1:.2e})")
+        print(f"H(s) = (s*{R*C:.2e}) / (1 + s*{R*C:.2e})")
 
     elif ordem == 2:
-        # 2ª ordem (duas células RC em cascata)
-        R1, R2 = R
-        C1, C2 = C
-        num = np.polymul([R1*C1, 0], [R2*C2, 0])  # (sR1C1)(sR2C2)
-        den = np.polymul([R1*C1, 1], [R2*C2, 1])
-        fc1 = 1 / (2*np.pi*R1*C1)
-        fc2 = 1 / (2*np.pi*R2*C2)
+        num = [R**2 * C**2, 0, 0]  # (sRC)^2
+        den = [R**2 * C**2, 2*R*C, 1]
+        fc = 1 / (2*np.pi*R*C)
         print("\n=== FILTRO PASSA-ALTA (2ª ORDEM) ===")
-        print(f"R1 = {R1} Ω, C1 = {C1} F")
-        print(f"R2 = {R2} Ω, C2 = {C2} F")
-        print(f"Frequências de corte individuais: {fc1:.2f} Hz e {fc2:.2f} Hz")
-        print(f"Função de transferência: H(s) = (s²*{R1*C1*R2*C2:.2e}) / [(1 + s*{R1*C1:.2e})(1 + s*{R2*C2:.2e})]")
+        print(f"R1 = R2 = {R} Ω, C1 = C2 = {C} F")
+        print(f"Frequência de corte única: {fc:.2f} Hz")
+        print(f"H(s) = (s²*{R**2*C**2:.2e}) / (1 + s*{R*C:.2e})²")
 
     else:
         raise ValueError("Ordem deve ser 1 ou 2.")
@@ -108,12 +95,7 @@ def filtro_passa_alta(R, C, ordem=1):
 
 # Exemplo de uso
 if __name__ == "__main__":
-    # 1ª ordem
     filtro_passa_baixa(1e3, 1e-6, ordem=1)
+    filtro_passa_baixa(1e3, 1e-6, ordem=2)
     filtro_passa_alta(1e3, 1e-6, ordem=1)
-
-    # 2ª ordem (duas células RC)
-    R = [1e3, 2e3]
-    C = [1e-6, 0.5e-6]
-    filtro_passa_baixa(R, C, ordem=2)
-    filtro_passa_alta(R, C, ordem=2)
+    filtro_passa_alta(1e3, 1e-6, ordem=2)
