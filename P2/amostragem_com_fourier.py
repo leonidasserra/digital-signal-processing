@@ -138,5 +138,5 @@ x_t = np.sin(2 * np.pi * f1 * t) + 0.5 * np.sin(2 * np.pi * f2 * t)
 print("\n" + "="*70)
 print("TESTE 1: fs = 30 Hz")
 print("="*70)
-fs1 = 30
+fs1 = 10
 x_n1, x_n_comp1, indices1, info1 = amostragem_completa(x_t, t, fs1)
