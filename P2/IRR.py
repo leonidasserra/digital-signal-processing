@@ -8,7 +8,7 @@ def projetar_filtro_iir(N=6, fs=10000, fp=1000, fs_reject=1500,
     """
     Projeta e testa filtro IIR Butterworth usando invariância ao impulso
     
-    PARÂMETROS QUE O PROFESSOR PODE ALTERAR:
+    PARÂMETROS:
     
     N : int
         Ordem do filtro (padrão: 6)
@@ -285,7 +285,7 @@ def projetar_filtro_iir(N=6, fs=10000, fp=1000, fs_reject=1500,
 
 # Executar com os parâmetros do slide 15/32
 if __name__ == "__main__":
-    print("\n🔧 EXECUTANDO FILTRO COM PARÂMETROS DO SLIDE 15/32\n")
+    print("\n EXECUTANDO FILTRO COM PARÂMETROS DO SLIDE 15/32\n")
     
     resultado = projetar_filtro_iir(
         N=6,                    # Ordem do filtro
