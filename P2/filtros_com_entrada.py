@@ -5,11 +5,19 @@ from scipy import signal
 def filtro_RC(fc, tipo="passa-baixa", ordem=1, A=1.0, f_in=100, fase_in=0):
     wc = 2 * np.pi * fc  # frequência angular de corte
 
+    # # Define numerador e denominador conforme o tipo e a ordem
+    # if tipo == "passa-baixa":
+    #     if ordem == 1:
+    #         num = [1]
+    #         den = [1/wc, 1]
+    #     elif ordem == 2:
+    #         num = [1]
+    #         den = [(1/wc)**2, 2*(1/wc), 1]
     # Define numerador e denominador conforme o tipo e a ordem
     if tipo == "passa-baixa":
         if ordem == 1:
             num = [1]
-            den = [1/wc, 1]
+            den = [1, fc]
         elif ordem == 2:
             num = [1]
             den = [(1/wc)**2, 2*(1/wc), 1]
@@ -17,18 +25,28 @@ def filtro_RC(fc, tipo="passa-baixa", ordem=1, A=1.0, f_in=100, fase_in=0):
             raise ValueError("Ordem deve ser 1 ou 2.")
     elif tipo == "passa-alta":
         if ordem == 1:
-            num = [1, 0]
+            num = [1/wc, 1]
             den = [1/wc, 1]
         elif ordem == 2:
             num = [1, 0, 0]
             den = [(1/wc)**2, 2*(1/wc), 1]
         else:
             raise ValueError("Ordem deve ser 1 ou 2.")
+    # elif tipo == "passa-alta":
+    #     if ordem == 1:
+    #         num = [1, 0]
+    #         den = [1/wc, 1]
+    #     elif ordem == 2:
+    #         num = [1, 0, 0]
+    #         den = [(1/wc)**2, 2*(1/wc), 1]
+    #     else:
+    #         raise ValueError("Ordem deve ser 1 ou 2.")
     else:
         raise ValueError("Tipo deve ser 'passa-baixa' ou 'passa-alta'.")
 
     # Bode
     sistema = signal.TransferFunction(num, den)
+    print("FT é:", sistema)
     w, mag, phase = signal.bode(sistema)
     mag_linear = 10**(mag/20)
 
@@ -52,7 +70,7 @@ def filtro_RC(fc, tipo="passa-baixa", ordem=1, A=1.0, f_in=100, fase_in=0):
     print(f"\n→ Sinal de saída :")
     print(f"   Amplitude de saída: {A_out:.3f}")
     print(f"   Fase de saída:      {fase_out:.3f} rad  ({np.degrees(fase_out):.1f}°)")
-    print(f"   Expressão: {A_out:.3f} * cos(2π*{f_in}t + {fase_out:.3f})")
+    print(f"   Expressão: {A_out:.3f} * cos(2π*{f_in}t + ({fase_out:.3f}))")
 
     # --- GRÁFICOS ---
     plt.figure(figsize=(10,8))
@@ -102,8 +120,16 @@ def filtro_RC(fc, tipo="passa-baixa", ordem=1, A=1.0, f_in=100, fase_in=0):
 
 
 # Exemplo de uso
-# Exemplo 1: entrada = cos(2π * 50t)
+# Exemplo 1: entrada = cos(50t)
 # f_in = 50 Hz (frequência linear)
-filtro_RC(fc=100, tipo="passa-baixa", ordem=1, A=1, f_in=50)
+
+R=1*1e3
+C=10*1e-6
+tau=10
+# fc=1/(2*np.pi*R*C)
+fc=1/(2*np.pi*tau)
+print("Frequência de corte do Filtro igual a",fc)
+# filtro_RC(fc, tipo="passa-baixa", ordem=1, A=1, f_in=100)
+filtro_RC(fc, tipo="passa-alta", ordem=1, A=1, f_in=100)
 
 
