@@ -90,10 +90,10 @@ def projetar_filtro_iir(N=None, fs=10000, fp=1000, fs_reject=1500,
     print(f"Rejeição: {fs_reject}Hz (ωs={ws_digital/np.pi:.3f}π) | Atten≥{stopband_atten_db}dB (δs={delta_s:.5f})")
     print("="*70)
     
-    # PASSO 1: Criar filtro analógico Butterworth H(s)
+    # H(s) do filtro analógico Butterworth 
     b_s, a_s = butter(N_usado, Omega_c, btype='low', analog=True)
     
-    # PASSO 2: Converter para digital H(z) usando invariância ao impulso
+    # Converter para digital H(z) usando invariância ao impulso
     # Usamos Td = 1 (normalizado) conforme slide do professor
     Td = 1  # Período normalizado
     sysd = cont2discrete((b_s, a_s), Td, method='impulse')
@@ -104,7 +104,7 @@ def projetar_filtro_iir(N=None, fs=10000, fp=1000, fs_reject=1500,
     print(f"Coefs b ({len(b_z)}): {b_z}")
     print(f"Coefs a ({len(a_z)}): {a_z}")
     
-    # PASSO 3: Calcular resposta em frequência
+    # Calcular resposta em frequência
     w, h = freqz(b_z, a_z, worN=4096)
     h_db = 20 * np.log10(np.abs(h) + 1e-10)
     h_mag = np.abs(h)
